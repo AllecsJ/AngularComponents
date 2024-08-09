@@ -1529,7 +1529,7 @@
     //return error message based on form control validations
     getErrorMessage(control: string) {
       if (this.userDetailsForm.controls[control].hasError('required')) {
-        return 'Error: This field is required';
+        return `Error: ${this.capitalizeEachWord(control)}  is required`;
       } else if (this.userDetailsForm.controls[control].hasError('email')) {
         return 'Error: Not a valid email';
       } else if (this.userDetailsForm.controls[control].hasError('pattern')) {
@@ -1560,6 +1560,10 @@
       } else if (this.userDetailsForm.controls[control].hasError('null')) {
         return 'Error: This field is required';
       } else if (this.userDetailsForm.controls[control].hasError('telephoneType')) {
+        return 'Error: Telephone type is required';
+      } else if (this.userDetailsForm.controls[control].hasError('telephoneType2')) {
+        return 'Error: Telephone type is required';
+      } else if (this.userDetailsForm.controls[control].hasError('telephoneType3')) {
         return 'Error: Telephone type is required';
       }
     }
@@ -1595,10 +1599,12 @@
 
     //set one control to required based on the value of another control
     createValidation(initialControl:string,requiredControl:string){
-      if(this.userDetailsForm.controls[initialControl].value == null || this.userDetailsForm.controls[initialControl].value == "" && this.userDetailsForm.controls[initialControl].valid){
+      if( this.userDetailsForm.controls[initialControl].valid ){
         this.userDetailsForm.controls[requiredControl].setValidators([Validators.required]);
+        this.userDetailsForm.controls[requiredControl].updateValueAndValidity();
       }else{
-        this.userDetailsForm.controls[requiredControl].clearValidators();
+       // this.userDetailsForm.controls[requiredControl].clearValidators();
+       console.log("clear");
       }
     }
   }
