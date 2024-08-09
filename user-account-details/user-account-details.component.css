@@ -1,0 +1,291 @@
+.userNameLabel{
+    margin-bottom: -30px;
+    text-align: center;
+}
+
+h1,.header{
+    text-align: center;
+    align-content: center;
+}
+
+#btn-control-div{
+    text-align: center;
+    margin-right: 10px;
+}
+
+#formControlBtn{
+    margin-right: 10px;
+}
+
+#errorMessage{
+    color: red;
+}
+
+
+/*  */
+
+
+.modal-content {
+    border-radius: 10px; /* Adjust the value to change the border-radius */
+  }
+
+  .modal-dialog {
+    border-radius: 15px; /* Adjust the value to change the border-radius */
+  }
+
+  .modal-header {
+    border-bottom: 1px solid #dee2e6; /* Add a border to separate header from body */
+  }
+
+  .modal-body {
+    padding: 20px; /* Add padding to the modal body */
+  }
+
+  .profile-section,
+  .address-section,
+  .phone-section {
+    margin-bottom: 15px; /* Add some space between different sections */
+  }
+
+
+  #govID-img{
+    max-height: 250px;
+    max-width: 450px;
+    overflow: auto;
+    cursor: zoom-in;
+  }
+
+    #govID-pdf{
+    max-height: 250px;
+    max-width: 450px;
+    overflow: auto;
+  }
+
+  @media screen and (max-width: 1400px) {
+    #govID-img{
+      max-height: 200px;
+      max-width: 350px;
+      overflow: auto;
+      cursor: zoom-in;
+    }
+
+    #govID-pdf{
+      max-height: 200px;
+      max-width: 350px;
+      overflow: auto;
+    }
+  
+  }
+
+  .filePicker.disabled {
+    background-color: #5ca0db; /* Grey color for disabled button */
+    color: #fff; /* White text color */
+    cursor: not-allowed; /* Display disabled cursor */
+    pointer-events: none; /* Disable pointer events */
+  }
+  
+
+
+.expandButton{
+  margin-left: 15px;
+}
+
+
+.tajRef{
+  margin-top: 15px;
+}
+
+@media screen and (max-width: 1199px) {
+  .tajRef{
+    text-align: center;
+  }
+}
+
+
+.dropdown-menu {
+  border: none; /* Remove default border */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+}
+
+.dropdown-content {
+  padding: 15px; /* Increased padding for better spacing */
+}
+
+.dropdown-content .modal-title {
+  margin-bottom: 10px; /* Add spacing below modal title */
+}
+
+.dropdown-content p {
+  margin: 5px 0; /* Adjust paragraph margin */
+}
+
+.dropdown-content hr {
+  border-color: rgba(0, 0, 0, 0.1); /* Soften the appearance of the horizontal rule */
+  margin: 10px 0; /* Adjust margin for hr */
+}
+
+.profile-section,
+.address-section,
+.contact-section {
+  margin-bottom: 15px; /* Add spacing between sections */
+}
+
+.dropdown-content strong {
+  color: #333333; /* Adjust color of strong elements */
+}
+
+.dropdown-content h5,
+.dropdown-content p {
+  margin: 0; /* Reset default margin */
+}
+
+.dropdown-toggle {
+  border-radius: 8px; /* Adjust button border radius */
+}
+
+button, label, .btn{
+  border-radius: 8px;
+}
+
+
+.redDetails{
+  margin-top: 20px;
+}
+
+
+/*  */
+
+* {box-sizing: border-box;}
+
+.img-magnifier-container {
+  position: relative;
+}
+
+.img-magnifier-glass {
+  position: absolute;
+  border: 3px solid #000;
+  border-radius: 50%;
+  cursor: none;
+  /*Set the size of the magnifier glass:*/
+  width: 100px;
+  height: 100px;
+}
+
+
+/* Add grey tones and other custom styles */
+body {
+  background-color: #f8f9fa;
+}
+
+.card {
+  border: 1px solid #d6d8db;
+  border-radius: 5px;
+}
+
+.bg-light-grey {
+  background-color: #f0f2f5;
+}
+
+.border-grey {
+  border-color: #d6d8db;
+}
+
+.text-grey-800 {
+  color: #4a4a4a;
+}
+
+.sig-img {
+  max-width: 200px;
+  width: 200px;
+  height: auto;
+}
+
+.gov-id-img {
+  max-width: 100%;
+  height: auto;
+  cursor:zoom-in;
+}
+
+
+.border{
+  border-radius: 5px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+hr{
+  margin-bottom: 8px;
+}
+
+.reference{
+  margin-top: 20px;
+}
+
+
+#expandedImg{
+  max-width: 500px;
+  /* object-fit: contain ; */
+  max-height: 500px;
+  overflow: scroll;
+  display: block;
+
+}
+
+
+#img-modal-body{
+  padding: 0;
+}
+
+[appDraggable] {
+  cursor: move;
+  user-select: none;
+}
+
+.list-group-reject{
+  background-color: #eeeeef;
+}
+
+
+.sig-img{
+  cursor: zoom-in;
+  /* overflow: auto; */
+
+}
+
+#fileInput{
+  margin-right: 10px;
+}
+
+#modal-signature{
+  max-height: auto;
+  max-width: 500px;
+  width: fit-content;
+}
+
+#ig-modal-content{
+  height: fit-content ;
+  width: fit-content;
+}
+
+#id-modal-content{
+  height: fit-content ;
+  width: fit-content;
+}
+
+
+#modal-img{
+  min-height: auto;
+  min-width: 600px;
+  max-height: auto;
+  max-width: 600px;
+  width: fit-content;
+}
+
+
+#expandedImg{
+  max-height: auto;
+  max-width: 500px;
+  width: fit-content;
+}
+
+
+

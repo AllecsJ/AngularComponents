@@ -1,0 +1,996 @@
+<div class="d-flex justify-content-center container" *ngIf="loading" id="loader">
+  <div class="spinner-border text-danger" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</div>
+
+
+<div class="container-fluid" *ngIf="!loading">
+  <div class="row">
+    <div class="col-xl-{{ approved == 0 ? '12' : '8' }}">
+      <div class="row">
+        <div class="container">
+          <ul class="nav justify-content-end bg-transparent">
+            <li class="nav-item"></li>
+          </ul>
+          <div class="container border p-3" style="margin-top: 40px">
+            <div *ngIf="approved; else noAction">
+              <form [formGroup]="userDetailsForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <h4 class="header">User Account Details <i class="fa fa-user" aria-hidden="true"></i></h4>
+                    <hr />
+                    <div class="row" *ngIf="approved ==1 || appState == 'approved'; else displayDropdown">
+                      <div class="col-lg-6 text-md-left">
+                        <label>
+                          User:<span> {{ username }}</span>
+                        </label>
+                      </div>
+                    </div>
+
+
+                    <ng-template #displayDropdown>
+                      <div class="col-lg-12 col-md-4 text-md-right">
+                        <div class="dropdown" *ngIf="approved == 0">
+                          <button class="btn btn-primary dropdown-toggle text-center" type="button"
+                            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            View TAJ Reference <i class="fa fa-database" aria-hidden="true"></i>
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <div class="dropdown-content">
+                              <!-- Your content here -->
+                              <div class="" *ngIf="viewTajUser?.firstName != null; else noRefData">
+                                <div class="profile-section">
+                                  <h5 class="modal-title" id="exampleModalLongTitle">
+                                    {{ viewTajUser?.firstName }}
+                                    <i class="fa fa-check" style="color: green"
+                                      *ngIf="compareString(viewSingleUser.firstName, viewTajUser.firstName)"></i>
+                                    <i class="fa fa-times" style="color: red"
+                                      *ngIf="!compareString(viewSingleUser.firstName, viewTajUser.firstName)"></i>
+                                    {{ viewTajUser?.middleName }}
+                                    {{ viewTajUser?.lastName }}
+                                    <i class="fa fa-check" style="color: green"
+                                      *ngIf="compareString(viewSingleUser.lastName, viewTajUser.lastName)"></i>
+                                    <i class="fa fa-times" style="color: red"
+                                      *ngIf="!compareString(viewSingleUser.lastName, viewTajUser.lastName)"></i>
+                                  </h5>
+                                  <hr />
+                                  <p>
+                                    <strong>DOB:</strong> {{ viewTajUser?.dob }}
+                                    <i class="fa fa-check" style="color: green"
+                                      *ngIf="compareDate(viewSingleUser.dob, viewTajUser.dob)"></i>
+                                    <i class="fa fa-times" style="color: red"
+                                      *ngIf="!compareDate(viewSingleUser.dob, viewTajUser.dob)"></i>
+                                  </p>
+                                  <p>
+                                    <strong>TRN:</strong> {{ viewTajUser?.trn }}
+                                    <i class="fa fa-check" style="color: green"
+                                      *ngIf="compareString(viewSingleUser.trn, viewTajUser.trn)"></i>
+                                    <i class="fa fa-times" style="color: red"
+                                      *ngIf="!compareString(viewSingleUser.trn, viewTajUser.trn)"></i>
+                                  </p>
+                                </div>
+                                <div class="address-section">
+                                  <hr />
+                                  <h6><strong>Address:</strong></h6>
+                                  <p>
+                                    {{ viewTajUser?.address }} <br />
+                                    {{ viewTajUser?.city }}<br />{{ viewTajUser?.parish }}<br />
+                                    {{ viewTajUser?.country }}
+                                  </p>
+                                  <hr />
+                                </div>
+                                <div class="contact-section">
+                                  <h6><strong>Contact Info:</strong></h6>
+                                  <p>
+                                    <strong>Phone Number:</strong>
+                                    {{ viewTajUser?.telephoneType }} | {{ viewTajUser?.telephone }}
+                                  </p>
+                                  <p><strong>Email:</strong> {{ viewTajUser?.email }}</p>
+                                </div>
+                              </div>
+                              <ng-template #noAction>
+                                <h5 class="alert alert-danger dropdown-content">Changes cannot be made to users that are
+                                  not
+                                  approved.</h5>
+                              </ng-template>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-template>
+
+                    <br />
+                    <!-- <div > -->
+                    <div class="has-invalid" *ngIf="error">
+                      <div class="alert alert-danger" role="alert">
+                        <div *ngFor="let err of error">
+                          <p>{{ err.message }}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- </div> -->
+                    <!-- dropdown -->
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-lg">
+                    <label>First Name<span class="text-danger">*</span></label>
+                    <input formControlName="firstName" type="text" class="form-control" (keypress)="
+                        changeToSentenceCase($event.target.value, 'firstName')
+                      " pattern="[^0-9]*" />
+                    <p *ngIf="!userDetailsForm.get('firstName').valid" id="errorMessage">
+                      {{getErrorMessage('firstName')}}</p>
+                  </div>
+                  <div class="form-group col-lg">
+                    <label>Middle Name</label>
+                    <input formControlName="middleName" type="text" class="form-control" (keypress)="
+                        changeToSentenceCase($event.target.value, 'middleName')
+                      " />
+                    <p *ngIf="!userDetailsForm.get('middleName').valid" id="errorMessage">
+                      {{getErrorMessage('middleName')}}</p>
+                  </div>
+                  <div class="form-group col-lg">
+                    <label>Last Name<span class="text-danger">*</span></label>
+                    <input formControlName="lastName" type="text" class="form-control" (keypress)="
+                        changeToSentenceCase($event.target.value, 'lastName')
+                      " />
+                    <p *ngIf="!userDetailsForm.get('lastName').valid" id="errorMessage">{{getErrorMessage('lastName')}}
+                    </p>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group col-lg-4">
+                    <label>TRN<span class="text-danger">*</span></label>
+                    <input formControlName="trn" type="text" class="form-control" minlength="13" maxlength="13" />
+                    <!-- <small class="text-success">Please enter 13 digit TRN</small> -->
+                    <p *ngIf="!userDetailsForm.get('trn').valid" id="errorMessage">{{getErrorMessage('trn')}}</p>
+                  </div>
+                  <div class="form-group col-lg-4">
+                    <label>Date of Birth<span class="text-danger">*</span></label>
+                    <div class="input-group">
+                      <input type="date" class="form-control" formControlName="dob" />
+                    </div>
+                    <p *ngIf="!userDetailsForm.get('dob').valid" id="errorMessage">{{getErrorMessage('dob')}}</p>
+
+                    <!-- <p *ngIf="!userDetailsForm.get('dob').valid" id="errorMessage">
+                      The user should be atleast 18 years old
+                    </p> -->
+                  </div>
+                  <div class="form-group col-lg-4">
+                    <label>Email<span class="text-danger">* </span></label>
+                    <input formControlName="email" type="email" class="form-control" />
+                    <small class="text-success">Format: youremail@.email.com</small>
+                    <p *ngIf="!userDetailsForm.get('email').valid" id="errorMessage">{{getErrorMessage('email')}}</p>
+                  </div>
+                </div>
+                <br />
+                <div class="col-lg-12 border p-3 form-group">
+                  <h4>Government ID Details <i class="fa fa-address-card-o" aria-hidden="true"></i></h4>
+                  <hr />
+                  <div class="form-row">
+                    <div class="form-group col-lg-6">
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label for="idType">ID Type<span class="text-danger">*</span></label>
+                            <select id="idType" formControlName="idType" class="form-control"
+                              (change)="getIdType(userDetailsForm.controls.idType.value)">
+                              <option value="" selected disabled>
+                                --- Select ID Type ---
+                              </option>
+                              <option value="Driver's Licence">Driver's Licence</option>
+                              <option value="Passport">Passport</option>
+                              <option value="National ID">National ID</option>
+                              <option value="Votor's ID">Voter's ID</option>
+                            </select>
+                            <p *ngIf="!userDetailsForm.get('idType').valid" id="errorMessage">
+                              {{getErrorMessage('idType')}}</p>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label>ID #<span class="text-danger">*</span></label>
+                            <input formControlName="idNumber" type="text" class="form-control" maxlength="15" />
+                            <p *ngIf="!userDetailsForm.get('idNumber').valid" id="errorMessage">
+                              {{getErrorMessage('idNumber')}}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label>Issue Date<span class="text-danger">*</span></label>
+                            <div class="input-group">
+                              <input type="date" class="form-control" formControlName="issueDate"
+                                (change)="reCalculateExpiryDate()" />
+                            </div>
+                            <p *ngIf="!userDetailsForm.get('issueDate').valid" id="errorMessage">
+                              {{getErrorMessage('issueDate')}}</p>
+
+                            <!-- <P *ngIf="!userDetailsForm.get('issueDate').valid" id="errorMessage">Issue date cannot be
+                            after
+                            today</P> -->
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label>Expiry Date<span class="text-danger ">*</span></label>
+                            <div class="input-group">
+                              <input type="date" class="form-control" placeholder="dd/mm/yyyy"
+                                formControlName="expiryDate" (change)="getExpiryDate($event.target.value)" />
+                            </div>
+                            <p *ngIf="!userDetailsForm.get('expiryDate').valid" id="errorMessage">
+                              {{getErrorMessage('expiryDate')}}. </p>
+                            <p>
+                              <em>{{ idExpiryDate }}. </em>
+                              <em class="text-danger" *ngIf="!userDetailsForm.get('expiryDate').valid">
+                                NB: Expiry date
+                                cannot be before today or after {{ expiryYears }}.</em>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div *ngIf="userdata.idPicture != null; else noImage">
+                        <label>Government ID<span class="text-danger">*</span></label>
+                        <br />
+                        <div>
+                          <img id="govID-img" *ngIf="isImage" [src]="imagePath" alt="Government ID" data-toggle="modal"
+                            data-target="#imageEnlargerModalCenter" />
+                        </div>
+                        <div id="govID-pdf">
+                          <pdf-viewer *ngIf="!isImage" [src]="imagePath" [render-text]="true"
+                            style="display: inline-block"></pdf-viewer>
+                        </div>
+                        <!-- <div class="row"> -->
+                        <div>
+                          <small class="text-success">Accepted file formats: jpg, jpeg, png, pdf</small>
+                          <br>
+                          <!-- File picker button -->
+                          <label for="fileInput" [class]="filepickerClass">
+                            Upload File
+                          </label>
+                          <input type="file" id="fileInput" (change)="onFilesAdded($event.target.files)"
+                            [disabled]="approved == 0" accept="image/jpeg, image/jpg, image/png, application/pdf"
+                            style="display: none" />
+                          <label *ngIf="!isImage && approved == 1" type="button" class="btn btn-primary expandButton"
+                            data-toggle="modal" data-target="#accountPdfImage" [class]="filepickerClass">
+                            Expand PDF
+                          </label>
+
+                          <br>
+                        </div>
+                        <!-- </div> -->
+                      </div>
+                      <ng-template #noImage>
+                        <div class="alert alert-danger" role="alert">
+                          No Government ID available for client.
+                        </div>
+
+                        <div>
+                          <small class="text-success">Accepted file formats: jpg, jpeg, png, pdf</small>
+                          <br>
+                          <!-- File picker button -->
+                          <label for="fileInput" [class]="filepickerClass">
+                            Upload File
+                          </label>
+                          <input type="file" id="fileInput" (change)="onFilesAdded($event.target.files)"
+                            [disabled]="approved == 0" accept="image/jpeg, image/jpg, image/png, application/pdf"
+                            style="display: none" />
+
+                          <br>
+                        </div>
+                      </ng-template>
+
+                      <p *ngIf="!userDetailsForm.get('expiryDate').valid || !userDetailsForm.get('issueDate').valid ||
+                      !userDetailsForm.get('idNumber').valid" id="errorMessage" id="errorMessage">
+                        Please Update ID information.
+                      </p>
+
+
+
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <br>
+                <div class="form-row">
+                  <div class="form-group col-lg-6 border p-3">
+                    <h4>Contact Information <i class="fa fa-phone" aria-hidden="true"></i></h4>
+                    <hr />
+                    <div class="form-group">
+                      <div class="row">
+                        <hr>
+
+                        <!-- <div [ngClass]="{ 'col-lg-12': contactCount === 1, 'col-lg-6': contactCount === 2, 'col-lg-4': contactCount === 3 }"> -->
+                        <div class="col-lg-12">
+
+                          <label for="telephone1">Phone Number 1</label>
+                          <div class="input-group">
+                            <input type="tel" id="telephone1" class="form-control" formControlName="telephone1"
+                              placeholder="Enter telephone number" minlength="10" maxlength="15" pattern="^[0-9]*$">
+                            <div class="input-group-append">
+                              <select id="telephoneType1" formControlName="telephoneType1" class="form-control">
+                                <option value="" selected disabled>
+                                  ---Type 1---
+                                </option>
+                                <option value="Landline">Landline</option>
+                                <option value="Mobile">Mobile</option>
+                                <option value="Work">Work</option>
+                              </select>
+                            </div>
+                          </div>
+                          <p *ngIf="!userDetailsForm.get('telephone1').valid" id="errorMessage">
+                            {{getErrorMessage('telephone1') || getErrorMessage('telephoneType1')}}</p>
+                        </div>
+
+
+                        <!-- <div *ngIf="contactCount >= 2"  [ngClass]="{ 'col-lg-12': contactCount === 1, 'col-lg-6': contactCount === 2, 'col-lg-4': contactCount === 3 }"> -->
+                        <div *ngIf="contactCount >= 2" class="col-lg-12">
+                          <label for="telephone1">Phone Number 2</label>
+                          <div class="input-group">
+                            <input (change)="createValidation('telephone2','telephoneType2')" type="tel" id="telephone1" class="form-control" formControlName="telephone2"
+                              placeholder="Enter telephone number" minlength="10" maxlength="15" pattern="^[0-9]*$" >
+                            <div class="input-group-append">
+                              <select id="telephoneType2" formControlName="telephoneType2" class="form-control" (change)="createValidation('telephoneType2','telephone2')" >
+                                <option value="" selected disabled>
+                                  ---Type 2---
+                                </option>
+                                <option value="Landline">Landline</option>
+                                <option value="Mobile">Mobile</option>
+                                <option value="Work">Work</option>
+                              </select>
+                            </div>
+                          </div>
+                          <p *ngIf="!userDetailsForm.get('telephone2').valid" id="errorMessage">
+                            {{getErrorMessage('telephone2') || getErrorMessage('telephoneType2')}}</p>
+                        </div>
+
+
+                        <!-- <div  *ngIf="contactCount >= 3" [ngClass]="{ 'col-lg-12': contactCount === 1, 'col-lg-6': contactCount === 2, 'col-lg-4': contactCount === 3 }"> -->
+                        <div *ngIf="contactCount >= 3" class="col-lg-12">
+                          <label for="telephone1">Phone Number 3</label>
+                          <div class="input-group">
+                            <input type="tel" id="telephone1" class="form-control" formControlName="telephone3"
+                              placeholder="Enter telephone number" minlength="10" maxlength="15" pattern="^[0-9]*$">
+                            <div class="input-group-append">
+                              <select id="telephoneType3" formControlName="telephoneType3" class="form-control">
+                                <option value="" selected disabled>
+                                  ---Type 3---
+                                </option>
+                                <option value="Landline">Landline</option>
+                                <option value="Mobile">Mobile</option>
+                                <option value="Work">Work</option>
+                              </select>
+                            </div>
+                          </div>
+                          <p *ngIf="!userDetailsForm.get('telephone3').valid" id="errorMessage">
+                            {{getErrorMessage('telephone3') || getErrorMessage('telephoneType3')}}</p>
+                        </div>
+
+                        <hr>
+
+                      </div>
+                    </div>
+                    <button *ngIf="contactCount < 3" type="button" class="btn btn-sm btn-info" (click)="addContact()"
+                      [disabled]="approved == 0">
+                      <i class="fa fa-plus"></i> Add contact
+                    </button>
+                    <button *ngIf="contactCount > 1 || false" type="button" class="btn btn-sm btn-danger ml-3"
+                      (click)="removeContact()" [disabled]="approved == 0">
+                      <i class="fa fa-trash"></i> Remove
+                    </button>
+                  </div>
+                  <div class="form-group col-lg-6 border p-3">
+                    <h4>Address <i class="fa fa-map-marker" aria-hidden="true"></i></h4>
+                    <hr />
+                    <div class="form-group">
+                      <div class="row">
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label for="country">Country<span class="text-danger">*</span></label>
+                            <select id="country" formControlName="country" class="form-control">
+                              <option *ngFor="let element of country" value="{{ element['1'] }}">
+                                {{ element["1"] }}
+                              </option>
+                            </select>
+                          </div>
+                          <p *ngIf="!userDetailsForm.get('country').valid" id="errorMessage">
+                            {{getErrorMessage('country')}}</p>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label for="street">Street Address<span class="text-danger">*</span></label>
+                            <input id="street" formControlName="street" type="text" class="form-control" (keypress)="
+                              changeToSentenceCase($event.target.value, 'street')
+                            " />
+                            <p *ngIf="!userDetailsForm.get('street').valid" id="errorMessage">
+                              {{getErrorMessage('street')}}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="userDetailsForm.value.country == 'Jamaica'" class="row">
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label for="cityJa">Town / City<span class="text-danger">*</span></label>
+                            <input id="cityJa" formControlName="city" type="text" class="form-control" (keypress)="
+                              changeToSentenceCase($event.target.value, 'city')
+                            " />
+                            <p *ngIf="!userDetailsForm.get('city').valid" id="errorMessage">{{getErrorMessage('city')}}
+                            </p>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="form-group">
+                            <label for="parish">Parish<span class="text-danger">*</span></label>
+                            <select id="parish" formControlName="parish" class="form-control">
+                              <option *ngFor="let element of parish" value="{{ element['1'] }}">
+                                {{ element["1"] }}
+                              </option>
+                            </select>
+                          </div>
+                          <p *ngIf="!userDetailsForm.get('parish').valid" id="errorMessage">
+                            {{getErrorMessage('parish')}}</p>
+                        </div>
+                      </div>
+                      <div *ngIf="userDetailsForm.value.country != 'Jamaica'" class="row">
+                        <div class="col-lg-4">
+                          <div class="form-group">
+                            <label for="cityOther">City / Town<span class="text-danger">*</span></label>
+                            <input id="cityOther" formControlName="city" type="text" class="form-control" (keypress)="
+                              changeToSentenceCase($event.target.value, 'city')
+                            " />
+                            <p *ngIf="!userDetailsForm.get('cityOther').valid" id="errorMessage">
+                              {{getErrorMessage('cityOther')}}</p>
+                          </div>
+                        </div>
+                        <div class="col-lg-5">
+                          <div class="form-group">
+                            <label for="parish">State / Province / Region<span class="text-danger">*</span></label>
+                            <input id="parish" formControlName="parish" type="text" class="form-control" (keypress)="
+                              changeToSentenceCase($event.target.value, 'parish')
+                            " />
+                            <p *ngIf="!userDetailsForm.get('parish').valid" id="errorMessage">
+                              {{getErrorMessage('parish')}}</p>
+                          </div>
+                        </div>
+                        <div class="col-lg-3">
+                          <div class="form-group">
+                            <label for="postalCode">Zip Code<span class="text-danger">*</span></label>
+                            <input id="postalCode" formControlName="postalCode" type="number" class="form-control" />
+                          </div>
+                          <p *ngIf="!userDetailsForm.get('postalCode').valid" id="errorMessage">
+                            {{getErrorMessage('postalCode')}}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group col-lg-12 border p-3">
+                    <div *ngIf="approved; else notActive">
+                      <div class="form-group col-lg-12 text-center">
+                        <h4 class="header">Upload Signature</h4>
+                        <hr>
+                        <label *ngIf="signatureAvailable">Signature<span class="text-danger">*</span></label>
+                        <br>
+                        <img id="" alt="Signature ID" class="sig-img" [src]="signatureImage" data-toggle="modal"
+                          data-target="#sigEnlargerModalCenter" *ngIf="signatureAvailable == true; else noSignature" />
+                        <ng-template #noSignature>
+                          <div class="alert alert-danger" role="alert">
+                            No signature available for client.
+                          </div>
+                        </ng-template>
+                        <br>
+                        <small class="text-success">Accepted file formats: jpg, jpeg, png</small>
+                        <br>
+                        <br>
+                        <label for="sigFile" [class]="filepickerClass">
+                          Upload Signature
+                        </label>
+                        <input type="file" id="sigFile" (change)="CompressSignature($event.target.files)"
+                          accept="image/jpeg, image/jpg, image/png" multiple="false" style="display: none"
+                          [disabled]="approved == 0" />
+                      </div>
+                    </div>
+                    <ng-template #notActive>
+                      <div class="alert alert-danger" role="alert">
+                        Signatures are not available for users that are not approved.
+                      </div>
+                    </ng-template>
+
+                    <div>
+
+                      <br>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- reject reasons -->
+                <div class="form-row" *ngIf="false">
+                  <div class="form-group col-lg-12 border p-3">
+                    <div>
+                      <div class="form-group col-lg-12 text-center">
+                        <h4 class="header">Reasons for rejection</h4>
+                        <div class="list-group-reject">
+                          <ng-container *ngFor="let selected of selectedRejectReason.split(','); let i = index">
+                            <div class="list-group-reject list-group-item-action" [class.col-lg-6]="(i%2==0)"
+                              [class.col-lg-12]="i%2 !=0">
+                              <h5 class="mb-1" *ngIf="i==0">Review Reasons for Rejection:</h5>
+                              <p class="mb-1">{{selected}}</p>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+                <!-- Modal -->
+                <div *ngIf="!formErrors" class="modal fade" id="updateModal" tabindex="-1" role="dialog"
+                  aria-labelledby="updateModal" aria-hidden="true">
+                  <div class="modal-dialog" modal-dialog-centered role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="updateModal">
+                          Save User Profile
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Are you sure you want to save changes to this user profile?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                          Close
+                        </button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="onSubmit()">
+                          Save changes
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!--pdf modal-->
+                <div class="modal fade" id="accountPdfImage" tabindex="-1" role="dialog" aria-labelledby="pdfImageTitle"
+                  aria-hidden="true">
+                  <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <div class="d-flex justify-content-between align-items-center w-100">
+                          <h5 class="modal-title mb-0" id="pdfModalCenterTitle">PDF Document</h5>
+                          <button class="btn btn-warning btn-sm ml-2" type="button" (click)="onClickDownloadPdf()">
+                            Download PDF
+                          </button>
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <pdf-viewer [src]="imagePath" [render-text]="true" style="display: block"></pdf-viewer>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </form>
+            </div>
+          </div>
+          <!-- TAJ Reference Modal -->
+          <div class="modal fade" id="tajModalCenter" tabindex="-1" role="dialog" aria-labelledby="tajModalCenterTitle"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered rounded" role="document">
+              <div class="modal-content rounded">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="tajModalLongTitle">
+                    TAJ Reference Info
+                  </h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body" *ngIf="viewTajUser?.firstName != null; else noRefData">
+                  <div class="profile-section">
+                    <h5 class="modal-title" id="tajModalLongTitle">
+                      {{ viewTajUser?.firstName }}
+                      <i class="fa fa-check" style="color: green" *ngIf="
+                          compareString(
+                            viewSingleUser.firstName,
+                            viewTajUser.firstName
+                          )
+                        "></i>
+                      <i class="fa fa-times" style="color: red" *ngIf="
+                          !compareString(
+                            viewSingleUser.firstName,
+                            viewTajUser.firstName
+                          )
+                        "></i>
+                      {{ viewTajUser?.middleName }}
+                      {{ viewTajUser?.lastName }}
+                      <i class="fa fa-check" style="color: green" *ngIf="
+                          compareString(viewSingleUser.lastName, viewTajUser.lastName)
+                        "></i>
+                      <i class="fa fa-times" style="color: red" *ngIf="
+                          !compareString(
+                            viewSingleUser.lastName,
+                            viewTajUser.lastName
+                          )
+                        "></i>
+                    </h5>
+                    <hr />
+                    <p>
+                      <strong>DOB:</strong> {{ viewTajUser?.dob }}
+                      <i class="fa fa-check" style="color: green"
+                        *ngIf="compareDate(viewSingleUser.dob, viewTajUser.dob)"></i>
+                      <i class="fa fa-times" style="color: red"
+                        *ngIf="!compareDate(viewSingleUser.dob, viewTajUser.dob)"></i>
+                    </p>
+                    <p>
+                      <strong>TRN:</strong> {{ viewTajUser?.trn }}
+                      <i class="fa fa-check" style="color: green"
+                        *ngIf="compareString(viewSingleUser.trn, viewTajUser.trn)"></i>
+                      <i class="fa fa-times" style="color: red"
+                        *ngIf="!compareString(viewSingleUser.trn, viewTajUser.trn)"></i>
+                    </p>
+                  </div>
+                  <div class="address-section">
+                    <hr />
+                    <h6><strong>Address:</strong></h6>
+                    <p>
+                      {{ viewTajUser?.address }} <br />
+                      {{ viewTajUser?.city }}<br />{{ viewTajUser?.parish }}<br />
+                      {{ viewTajUser?.country }}
+                    </p>
+                    <hr />
+                  </div>
+                  <div class="contact-section">
+                    <h6><strong>Contact Info:</strong></h6>
+                    <p>
+                      <strong>Phone Number:</strong>
+                      {{ viewTajUser?.telephoneType }} | {{ viewTajUser?.telephone }}
+                    </p>
+                    <p><strong>Email:</strong> {{ viewTajUser?.email }}</p>
+                  </div>
+                </div>
+                <ng-template #noRefData>
+                  <div class="modal-body">
+                    <div class="alert alert-danger" role="alert">
+                      No reference returned from TAJ
+                    </div>
+                  </div>
+                </ng-template>
+
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container col-xl-4 border p-3" style="margin-top: 40px;" *ngIf="!loading && approved ==1">
+      <div class="sticky-top">
+        <!-- Assist User Section -->
+        <div class="row">
+          <div class="col-lg-12">
+            <h4 class="header">Assist User <i class="fa fa-info-circle" aria-hidden="true"></i></h4>
+            <hr />
+          </div>
+        </div>
+        <div class="row">
+          <!-- Tab Pills on the Left -->
+          <div class="col-8">
+            <div class="list-group" id="list-tab" role="tablist">
+              <a class="list-group-item list-group-item-action active" id="list-home-list" data-toggle="list"
+                href="#list-home" role="tab" aria-controls="home">Send the link to reset the user's password.</a>
+              <a class="list-group-item list-group-item-action" id="list-profile-list" data-toggle="list"
+                href="#list-profile" role="tab" aria-controls="profile">Resend email for user to create their
+                password.</a>
+            </div>
+          </div>
+
+          <!-- Buttons on the Right -->
+          <div class="col-4">
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="list-home" role="tabpanel" aria-labelledby="list-home-list">
+                <button type="button" class="btn btn-primary" (click)="onResetPassword()"
+                  *ngIf="!resetPasswordProcessing">
+                  Send link
+                </button>
+                <button class="btn btn-primary" type="button" disabled *ngIf="resetPasswordProcessing">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Loading...
+                </button>
+              </div>
+
+              <div class="tab-pane fade" id="list-profile" role="tabpanel" aria-labelledby="list-profile-list">
+                <button type="button" class="btn btn-primary" data-toggle="modal"
+                  data-target="#resetPasswordModalCenter" *ngIf="!revertProcessing">
+                  Resend Email
+                </button>
+                <button class="btn btn-primary" type="button" disabled *ngIf="revertProcessing">
+                  <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  Loading...
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="resendPasswordModalCenter" tabindex="-1" role="dialog"
+                  aria-labelledby="resendPasswordModalCenterTitle" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="resendPasswordModalLongTitle">Confirm Sending Link</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        Are you sure you want to send the email to the user to create their password?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                          (click)="onResendCreatePasswordLink()">Send Link</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tab-pane fade" id="list-messages" role="tabpanel" aria-labelledby="list-messages-list">
+                <button type="button" class="btn btn-primary">Lock Account</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br class="reference">
+        <!-- User Reference Section -->
+        <div class="row">
+          <div class="col-12 tajRef">
+            <h4 class="header redDetails">Reference Details <i class="fa fa-database" aria-hidden="true"></i></h4>
+            <hr>
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle text-center" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                View TAJ Reference <i class="fa fa-database" aria-hidden="true"></i>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="dropdown-content">
+                  <!-- Your content here -->
+                  <div class="" *ngIf="viewTajUser?.firstName != null; else noRefData">
+                    <div class="profile-section">
+                      <h5 class="modal-title" id="exampleModalLongTitle">
+                        {{ viewTajUser?.firstName }}
+                        <i class="fa fa-check" style="color: green"
+                          *ngIf="compareString(viewSingleUser.firstName, viewTajUser.firstName)"></i>
+                        <i class="fa fa-times" style="color: red"
+                          *ngIf="!compareString(viewSingleUser.firstName, viewTajUser.firstName)"></i>
+                        {{ viewTajUser?.middleName }}
+                        {{ viewTajUser?.lastName }}
+                        <i class="fa fa-check" style="color: green"
+                          *ngIf="compareString(viewSingleUser.lastName, viewTajUser.lastName)"></i>
+                        <i class="fa fa-times" style="color: red"
+                          *ngIf="!compareString(viewSingleUser.lastName, viewTajUser.lastName)"></i>
+                      </h5>
+                      <hr />
+                      <p>
+                        <strong>DOB:</strong> {{ viewTajUser?.dob }}
+                        <i class="fa fa-check" style="color: green"
+                          *ngIf="compareDate(viewSingleUser.dob, viewTajUser.dob)"></i>
+                        <i class="fa fa-times" style="color: red"
+                          *ngIf="!compareDate(viewSingleUser.dob, viewTajUser.dob)"></i>
+                      </p>
+                      <p>
+                        <strong>TRN:</strong> {{ viewTajUser?.trn }}
+                        <i class="fa fa-check" style="color: green"
+                          *ngIf="compareString(viewSingleUser.trn, viewTajUser.trn)"></i>
+                        <i class="fa fa-times" style="color: red"
+                          *ngIf="!compareString(viewSingleUser.trn, viewTajUser.trn)"></i>
+                      </p>
+                    </div>
+                    <div class="address-section">
+                      <hr />
+                      <h6><strong>Address:</strong></h6>
+                      <p>
+                        {{ viewTajUser?.address }} <br />
+                        {{ viewTajUser?.city }}<br />{{ viewTajUser?.parish }}<br />
+                        {{ viewTajUser?.country }}
+                      </p>
+                      <hr />
+                    </div>
+                    <div class="contact-section">
+                      <h6><strong>Contact Info:</strong></h6>
+                      <p>
+                        <strong>Phone Number:</strong>
+                        {{ viewTajUser?.telephoneType }} | {{ viewTajUser?.telephone }}
+                      </p>
+                      <p><strong>Email:</strong> {{ viewTajUser?.email }}</p>
+                    </div>
+                  </div>
+                  <ng-template #noAction>
+                    <h5 class="alert alert-danger dropdown-content">Changes cannot be made to users that are not
+                      approved.</h5>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Controls -->
+  <br>
+  <br>
+  <div class="col-lg-{{ approved == 0 || screenWidth < 1199 ? '12' : '8' }}" id="btn-control-div">
+    <button type="button" class="btn btn-danger" id="formControlBtn" (click)="closeTab()">
+      Close
+    </button>
+    <button *ngIf="approved == 1" type="button" class="btn btn-success" id="formControlBtn"
+      [disabled]="!userDetailsForm.valid || !userDetailsForm.dirty" data-toggle="modal" data-target="#updateModal">
+      Update
+    </button>
+    <br>
+  </div>
+
+
+
+  <div class="col-lg-{{ approved == 0 || screenWidth < 1199 ? '12' : '8' }}" id="panelsStayOpen-collapseOne"
+    class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne" *ngIf="appState == 'approved'">
+    <div class="accordion-body">
+
+      <div class="container mt-5">
+        <h2 class="mb-4 text-center">Audit Trail</h2>
+        <table class="table table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Timestamp</th>
+              <th>Actioned By</th>
+              <th>Updates Made</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="col-lg-{{ approved == 0 || screenWidth < 1199 ? '12' : '8' }}" id="panelsStayOpen-collapseOne"
+    class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne" *ngIf="appState == 'rejected'">
+    <div class="accordion-body">
+
+      <div class="container mt-5">
+        <h2 class="mb-4 text-center">Audit Trail</h2>
+        <table class="table table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Timestamp</th>
+              <th>Actioned By</th>
+              <th>Reasons for Rejection</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{rejectionAudit.dateRejected}}</td>
+              <td>{{rejectionAudit.rejectedBy}}</td>
+              <td>{{rejectionAudit.rejectedReasons ? rejectionAudit.rejectedReasons : 'Not Captured'}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+<!-- Modal -->
+<div *ngIf="!loading" class="modal fade" id="resetPasswordModalCenter" tabindex="-1" role="dialog"
+  aria-labelledby="resetPasswordModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="resetPasswordModalLongTitle">Confirm Sending Email</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>The email will be sent to the user's email address <em>{{userdata.email}}</em>.</h5>
+        <h6>Please ask the user to check their email for the link to set their password.</h6>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="onResendCreatePasswordLink()" data-dismiss="modal">Create
+          Password</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- enlarge image -->
+<!-- Button trigger modal -->
+
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageEnlargerModalCenter" tabindex="-1" role="dialog"
+  aria-labelledby="imageEnlargerModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" id="id-modal-content"> 
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageEnlargerModalLongTitle">Government ID image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="img-modal-body">
+        <img src="{{imagePath}}" alt="Government ID" id="modal-img" class="img-fluid" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- signature Modal -->
+<div class="modal fade" id="sigEnlargerModalCenter" tabindex="-1" role="dialog"
+  aria-labelledby="sigEnlargerModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" id="sig-modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="sigEnlargerModalLongTitle">Signature Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="img-modal-body">
+        <img id="modal-signature" alt="Signature ID" [src]="signatureImage">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

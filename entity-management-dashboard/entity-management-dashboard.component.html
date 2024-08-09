@@ -1,0 +1,29 @@
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" id="pills-entityDetails-tab" data-toggle="pill" href="#pills-entityDetails" role="tab" aria-controls="pills-entityDetails" aria-selected="true">Entity Details</a>
+  </li>
+  <li class="nav-item" *ngIf="approved == 1" >
+    <a class="nav-link" id="pills-employeeDetails-tab" data-toggle="pill" href="#pills-employeeDetails" role="tab" aria-controls="pills-employeeDetails" aria-selected="false">Employee Details</a>
+  </li>
+  <li class="nav-item" *ngIf="approved == 1" >
+    <a class="nav-link" id="pills-agentDetails-tab" data-toggle="pill" href="#pills-agentDetails" role="tab" aria-controls="pills-agentDetails" aria-selected="false">Agent Details</a>
+  </li>
+</ul>
+<div class="tab-content" id="pills-tabContent">
+  <div class="tab-pane fade show active" id="pills-entityDetails" role="tabpanel" aria-labelledby="pills-entityDetails-tab">
+    <div *ngxPermissionsOnly="['admin.review.applicant']">
+      <app-entity-chief-details></app-entity-chief-details>
+    </div>
+  </div>
+  <div *ngIf="approved == 1"  class="tab-pane fade" id="pills-employeeDetails" role="tabpanel" aria-labelledby="pills-employeeDetails-tab"><div *ngxPermissionsOnly="['admin.review.applicant']">
+    <div *ngxPermissionsOnly="['admin.review.applicant']">
+      <app-entity-employee-details></app-entity-employee-details>
+    </div>
+  </div>
+</div>
+  <div *ngIf="approved == 1" class="tab-pane fade" id="pills-agentDetails" role="tabpanel" aria-labelledby="pills-agentDetails-tab">
+    <div *ngxPermissionsOnly="['admin.review.applicant']">
+      <app-entity-agent-details></app-entity-agent-details>
+    </div>
+  </div>
+</div>

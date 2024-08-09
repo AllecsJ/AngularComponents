@@ -1,0 +1,130 @@
+#header{
+    text-align: center;
+    font-style: italic;
+  }
+  
+  h1,.header{
+    text-align: center;
+    align-content: center;
+  }
+  
+  #btn-control-div{
+    text-align: center;
+    margin-right: 10px;
+  }
+  
+  #formControlBtn{
+    text-align: center;
+    margin-right: 10px;
+    margin-top: 30px
+  }
+  
+  #error{
+    color: red;
+  }
+  
+  
+  
+  
+  #errorMessage{
+    color: red;
+  }
+  
+  
+  
+  #alert{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  /* Style the DataTables search box */
+  #DataTables_Table_0_filter {
+    margin-bottom: 20px; /* Increase the margin for better spacing */
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Style the label */
+  #DataTables_Table_0_filter label {
+    font-weight: bold;
+    margin-right: 10px; /* Add some spacing to the right of the label */
+  }
+  
+  /* Style the search input */
+  #DataTables_Table_0_filter input[type="search"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease-in-out;
+    width: 100%; /* Make sure the input takes the full width */
+  }
+  
+  /* Remove the default outline on focus */
+  #DataTables_Table_0_filter input[type="search"]:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+  
+  /* Style the "Show X entries" label */
+  .dataTables_length label {
+    font-weight: lighter;
+    margin-right: 10px; /* Add some spacing to the right of the label */
+    border-radius: 10px;
+  }
+  
+  /* Style the select element itself */
+  .dataTables_length select {
+    padding: 6px 10px;
+    border: 1px #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+  }
+  
+  /* Remove the default styling on the select element */
+  .dataTables_length select:focus {
+    outline: none;
+  }
+  
+  /* Style the select element on hover */
+  .dataTables_length select:hover {
+    border-color: #007bff;
+    border: none;
+  }
+  
+  /* Style the select element on focus */
+  .dataTables_length select:focus {
+    border-color: #007bff;
+    border: none;
+  }
+  
+  .table-bordered {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+  }
+   
+  
+  .table-bordered th, .table-bordered td {
+    border: 1px solid #dee2e6;
+    padding: 0.75rem;
+    vertical-align: top;
+  }
+  
+  .table-bordered th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+  
+  .table-bordered thead th, .table-bordered thead td {
+    border-bottom-width: 2px;
+  }
