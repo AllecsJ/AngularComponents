@@ -346,7 +346,9 @@
                             </div>
                           </div>
                           <p *ngIf="!userDetailsForm.get('telephone2').valid" id="errorMessage">
-                            {{getErrorMessage('telephone2') || getErrorMessage('telephoneType2')}}</p>
+                            {{getErrorMessage('telephone2') }}</p>
+                            <p *ngIf="!userDetailsForm.get('telephoneType2').valid" id="errorMessage" class="float-right">
+                              {{ getErrorMessage('telephoneType2')}}</p>
                         </div>
 
 
@@ -355,9 +357,9 @@
                           <label for="telephone1">Phone Number 3</label>
                           <div class="input-group">
                             <input type="tel" id="telephone1" class="form-control" formControlName="telephone3"
-                              placeholder="Enter telephone number" minlength="10" maxlength="15" pattern="^[0-9]*$">
+                              placeholder="Enter telephone number" minlength="10" maxlength="15" pattern="^[0-9]*$" (change)="createValidation('telephone3','telephoneType3')">
                             <div class="input-group-append">
-                              <select id="telephoneType3" formControlName="telephoneType3" class="form-control">
+                              <select id="telephoneType3" formControlName="telephoneType3" class="form-control" (change)="createValidation('telephoneType3','telephone3')" >
                                 <option value="" selected disabled>
                                   ---Type 3---
                                 </option>
@@ -368,7 +370,9 @@
                             </div>
                           </div>
                           <p *ngIf="!userDetailsForm.get('telephone3').valid" id="errorMessage">
-                            {{getErrorMessage('telephone3') || getErrorMessage('telephoneType3')}}</p>
+                            {{getErrorMessage('telephone3') }}</p>
+                            <p *ngIf="!userDetailsForm.get('telephoneType3').valid" id="errorMessage" class="float-right">
+                              {{ getErrorMessage('telephoneType3')}}</p>
                         </div>
 
                         <hr>
